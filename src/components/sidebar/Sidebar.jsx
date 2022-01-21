@@ -14,14 +14,11 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import ArticleIcon from "@mui/icons-material/Article";
 import {
   Business,
-  CurrencyRupee,
   FitnessCenter,
   Memory,
   NewspaperRounded,
@@ -31,6 +28,10 @@ import {
 } from "@mui/icons-material";
 import MemoryIcon from "@mui/icons-material/Memory";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { darkMode, lightMode } from "../../redux/themeSlice";
+import { useSelector } from "react-redux";
+
 const drawerWidth = 240;
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -40,7 +41,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   "& .MuiSwitch-switchBase": {
     margin: 1,
     padding: 0,
-    transform: "translateX(6px)",
+    transform: "translateX(4px)",
     "&.Mui-checked": {
       color: "#fff",
       transform: "translateX(43px)",
@@ -146,8 +147,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Sidebar() {
+  const mode = useSelector((state) => state.theme.mode);
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -177,19 +181,37 @@ export default function Sidebar() {
           </IconButton>
           <Typography
             variant="h6"
-            style={{ color: "white",display:"flex",alignItems:"center" }}
             noWrap
             component="div"
-            fontFamily= 'Anton, Arial'
-            fontSize= "25px"
+            fontFamily="Anton, Arial"
+            fontSize="25px"
             letterSpacing="1px"
           >
-           <NewspaperRounded fontSize="large" style={{marginRight:"2px"}}/>LamaNews
+            <Link
+              style={{ color: "white", display: "flex", alignItems: "center",textDecoration:"none" }}
+              to="/"
+            >
+              <NewspaperRounded
+                fontSize="large"
+                style={{ marginRight: "2px" }}
+              />
+              LamaNews
+            </Link>
           </Typography>
-          {/* <FormControlLabel
-            control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+          <FormControlLabel
+            control={
+              <MaterialUISwitch
+                sx={{ m: 1, position: "absolute", right: "0px" }}
+                defaultChecked
+                onChange={() => {
+                  mode === "dark"
+                    ? dispatch(lightMode())
+                    : dispatch(darkMode());
+                }}
+              />
+            }
             label=""
-          /> */}
+          />
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -213,26 +235,28 @@ export default function Sidebar() {
             "Sports",
             "Health",
           ].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index === 0 ? (
-                  <ArticleIcon />
-                ) : index === 1 ? (
-                  <Business />
-                ) : index === 2 ? (
-                  <TheaterComedy />
-                ) : index === 3 ? (
-                  <Science />
-                ) : index === 4 ? (
-                  <Memory />
-                ) : index === 5 ? (
-                  <SportsCricket />
-                ) : (
-                  <FitnessCenter />
-                )}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
+            <Link key={text} to={`/${text === "Top Headlines" ? "" : text}`}>
+              <ListItem button>
+                <ListItemIcon>
+                  {index === 0 ? (
+                    <ArticleIcon />
+                  ) : index === 1 ? (
+                    <Business />
+                  ) : index === 2 ? (
+                    <TheaterComedy />
+                  ) : index === 3 ? (
+                    <Science />
+                  ) : index === 4 ? (
+                    <Memory />
+                  ) : index === 5 ? (
+                    <SportsCricket />
+                  ) : (
+                    <FitnessCenter />
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            </Link>
           ))}
         </List>
       </Drawer>
