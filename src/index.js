@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import ParticleJS from "./components/particleJS/ParticleJS";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+
 ReactDOM.render(
   <Provider store={store}>
     {/* <ParticleJS /> */}

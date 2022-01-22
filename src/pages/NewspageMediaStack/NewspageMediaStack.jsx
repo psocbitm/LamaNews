@@ -7,28 +7,21 @@ import { useTheme } from "@mui/material/styles";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ClipLoader from "react-spinners/ClipLoader";
 import Masonry from "@mui/lab/Masonry";
-import { Link, useParams } from "react-router-dom";
-import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { Update } from "@mui/icons-material";
-function Newspage({ category, pagesize }) {
+function NewspageMediaStack({ category, limit }) {
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [totalResults, setTotalResults] = useState(0);
-  const [url, setUrl] = useState("");
-  const theme = useTheme();
   const mode = useSelector((state) => state.theme.mode);
+  const [totalResults, setTotalResults] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      //******************************************PASTE YOUR API KEY HERE******************************************//
-      const url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=a9d9cc0e2bbc4bd3b490b54617009e71&pageSize=${pagesize}&page=${page}&category=${category}`;
+      const url = `https://newsdata.io/api/1/news?apikey=pub_38704c96c835ffc76e06a96e4ea7d1212235&country=in&language=en&page=${page}&category=${category}`;
       const result = await axios(url);
       setTotalResults(result.data.totalResults);
-      setData(data.concat(result.data.articles));
+      setData(data.concat(result.data.results));
       setLoading(false);
     }
     fetchData();
@@ -37,12 +30,11 @@ function Newspage({ category, pagesize }) {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      //******************************************PASTE YOUR API KEY HERE******************************************//
-      const url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=a9d9cc0e2bbc4bd3b490b54617009e71&pageSize=${pagesize}&page=${page}&category=${category}`;
+      const url = `https://newsdata.io/api/1/news?apikey=pub_38704c96c835ffc76e06a96e4ea7d1212235&country=in&language=en&page=${page}&category=${category}`;
       const result = await axios(url);
-      setTotalResults(result.data.totalResults);
       setData([]);
-      setData(result.data.articles);
+      setTotalResults(result.data.totalResults);
+      setData(result.data.results);
       setLoading(false);
     }
     fetchData();
@@ -58,7 +50,6 @@ function Newspage({ category, pagesize }) {
         <Sidebar />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-
           <div className="news-articles-container">
             <InfiniteScroll
               style={{ overflow: "hidden" }}
@@ -82,14 +73,14 @@ function Newspage({ category, pagesize }) {
               >
                 {data.map((article) => (
                   <Newscard
-                    key={article.url}
+                    key={article.link}
                     title={article.title}
                     imgUrl={
-                      article.urlToImage ||
+                      article.image_url ||
                       "https://www.netix.net/assets/logo/no_image.png"
                     }
                     desc={article.description}
-                    url={article.url}
+                    url={article.link}
                   />
                 ))}
               </Masonry>
@@ -101,4 +92,4 @@ function Newspage({ category, pagesize }) {
   );
 }
 
-export default Newspage;
+export default NewspageMediaStack;

@@ -188,7 +188,12 @@ export default function Sidebar() {
             letterSpacing="1px"
           >
             <Link
-              style={{ color: "white", display: "flex", alignItems: "center",textDecoration:"none" }}
+              style={{
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                textDecoration: "none",
+              }}
               to="/"
             >
               <NewspaperRounded
@@ -235,7 +240,14 @@ export default function Sidebar() {
             "Sports",
             "Health",
           ].map((text, index) => (
-            <Link key={text} to={`/${text === "Top Headlines" ? "" : text}`}>
+            <Link
+              key={text}
+              to={`/${text === "Top Headlines" ? "" : text}`}
+              style={{
+                textDecoration: "none",
+                color: `${mode === "light" ? "black" : "white"}`,
+              }}
+            >
               <ListItem button>
                 <ListItemIcon>
                   {index === 0 ? (
