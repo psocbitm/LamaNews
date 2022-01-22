@@ -8,6 +8,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import ClipLoader from "react-spinners/ClipLoader";
 import Masonry from "@mui/lab/Masonry";
 import { useSelector } from "react-redux";
+import apiKeys from "../../apikeys";
 function NewspageMediaStack({ category, limit }) {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
@@ -15,10 +16,12 @@ function NewspageMediaStack({ category, limit }) {
   const mode = useSelector((state) => state.theme.mode);
   const [totalResults, setTotalResults] = useState(0);
 
+  const apikey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
+
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const url = `https://newsdata.io/api/1/news?apikey=pub_38704c96c835ffc76e06a96e4ea7d1212235&country=in&language=en&page=${page}&category=${category}`;
+      const url = `https://newsdata.io/api/1/news?apikey=${apikey}&country=in&language=en&page=${page}&category=${category}`;
       const result = await axios(url);
       setTotalResults(result.data.totalResults);
       setData(data.concat(result.data.results));
@@ -30,7 +33,7 @@ function NewspageMediaStack({ category, limit }) {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const url = `https://newsdata.io/api/1/news?apikey=pub_38704c96c835ffc76e06a96e4ea7d1212235&country=in&language=en&page=${page}&category=${category}`;
+      const url = `https://newsdata.io/api/1/news?apikey=${apikey}&country=in&language=en&page=${page}&category=${category}`;
       const result = await axios(url);
       setData([]);
       setTotalResults(result.data.totalResults);
